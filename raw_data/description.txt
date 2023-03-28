@@ -1,3 +1,7 @@
-dataser_01 - first dataset for this study:
+dataser_01 - first(trial) dataset for this study:
     - size: 2500
-    - angles: near 90 or 
+    - angles: horisontalonly +-5 degrees
+
+dataser_02 - first complete dataset:
+    - size: 
+    - angles:
