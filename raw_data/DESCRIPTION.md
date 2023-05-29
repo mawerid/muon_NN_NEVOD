@@ -6,5 +6,5 @@
 - just for testing process of experiment
 
 # Dataset_02 - first complete dataset:
-- size: 
-- angles:
+- size: 48806
+- angles: all angles
