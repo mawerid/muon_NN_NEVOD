@@ -2,3 +2,5 @@ tmp.txt
 *.idea
 logs
 *.ipynb_checkpoints
+data/dataset*
+raw_data
