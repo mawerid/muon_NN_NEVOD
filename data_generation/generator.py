@@ -73,16 +73,13 @@ def generate_random_points_sct(n, x_range, y_range, z_range):
     return points
 
 
-def generate_data_sct(points_num: int) -> np.ndarray:
+def generate_data_sct(points_num: int) -> [np.ndarray, np.ndarray]:
     cnt_size_x = 0.23
     cnt_size_y = 0.63
     cnt_size_z = 0.055
 
-    cnt_pos_z_up = 4.5 - 4.5 + 0.3
-    cnt_pos_z_down = -4.5 - 4.5 + 0.3
-
-    cnt_pos_x = 0
-    cnt_pos_y = 0
+    cnt_pos_z_up = 4.5 + 4.5  # - 0.3
+    cnt_pos_z_down = -4.5 + 4.5  # - 0.3
 
     point_pairs = []
     upper = []
@@ -92,8 +89,8 @@ def generate_data_sct(points_num: int) -> np.ndarray:
 
     for j in range(5):
         for i in range(4):
-            cnt_pos_x = -3 - cnt_size_x / 2 + 2 * i - 4.5
-            cnt_pos_y = -7.375 - cnt_size_y / 2 + 2.5 * j - 13
+            cnt_pos_x = -3 - cnt_size_x / 2 + 2 * i + 4.5
+            cnt_pos_y = -7.375 - cnt_size_y / 2 + 2.5 * j + 13
             upper_points = generate_random_points_sct(points_num, (cnt_pos_x, cnt_pos_x + cnt_size_x),
                                                       (cnt_pos_y, cnt_pos_y + cnt_size_y),
                                                       (cnt_pos_z_up, cnt_pos_z_up + cnt_size_z))
@@ -106,8 +103,8 @@ def generate_data_sct(points_num: int) -> np.ndarray:
             points = np.vstack((points, upper_points))
             points = np.vstack((points, lower_points))
 
-            cnt_pos_x = -4 - cnt_size_x / 2 + 2 * i - 4.5
-            cnt_pos_y = -6.125 - cnt_size_y / 2 + 2.5 * j - 13
+            cnt_pos_x = -4 - cnt_size_x / 2 + 2 * i + 4.5
+            cnt_pos_y = -6.125 - cnt_size_y / 2 + 2.5 * j + 13
             upper_points = generate_random_points_sct(points_num, (cnt_pos_x, cnt_pos_x + cnt_size_x),
                                                       (cnt_pos_y, cnt_pos_y + cnt_size_y),
                                                       (cnt_pos_z_up, cnt_pos_z_up + cnt_size_z))
@@ -127,7 +124,7 @@ def generate_data_sct(points_num: int) -> np.ndarray:
             point_pairs.append((up, low))
 
     # return np.array(point_pairs)
-    return points
+    return point_pairs
 
 
 # define functions
@@ -265,16 +262,19 @@ def main() -> int:
     # z -= 4.5 - 0.3
 
     points_pair = generate_data_sct(100)
-    print(points_pair.shape)
+    print(points_pair[:10])
+    # points_pair += 2 * np.array([4.5, 13, 4.2])
+    print(points_pair[:10])
+    # print(points_pair.shape)
 
     # file_path = "OTDCR_935.txt"
     # loaded_data = load_data(file_path)
     # loaded_data = np.vstack((points_pair, loaded_data))
     # visualise_data(loaded_data[:, 0], loaded_data[:, 1], loaded_data[:, 2])
 
-    visualise_data(points_pair[:, 0], points_pair[:, 1], points_pair[:, 2])
+    # visualise_data(points_pair[:, 0], points_pair[:, 1], points_pair[:, 2])
 
-    # save_data_sct(points_pair)
+    save_data_sct(points_pair)
 
     # visualise_data(x, y, z)
 
