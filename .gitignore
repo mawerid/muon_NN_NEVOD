@@ -1,5 +1,6 @@
-data_generation/*.txt
 *.idea
 logs
 *.ipynb_checkpoints
-data/dataset*
+dataset/dataset*
+dataset/exp_data
+data_sim

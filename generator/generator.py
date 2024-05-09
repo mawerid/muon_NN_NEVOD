@@ -130,7 +130,7 @@ def generate_data_sct(points_num: int) -> [np.ndarray, np.ndarray]:
 # define functions
 def generate_data(size: int) -> tuple[Any, Any, Any]:
     """
-    generate evenly distributed 3D data on sphere (by Golden section)
+    generate evenly distributed 3D dataset on sphere (by Golden section)
     :param size: amount of points to generate
     :return: 3 np arrays (x, y ,z) respectively
     """
@@ -144,7 +144,7 @@ def generate_data(size: int) -> tuple[Any, Any, Any]:
 
 def visualise_data(x: np.ndarray, y: np.ndarray, z: np.ndarray) -> None:
     """
-    Visualise data
+    Visualise dataset
     :param x: x coordinate
     :param y: y coordinate
     :param z: z coordinate
@@ -170,13 +170,13 @@ def visualise_data(x: np.ndarray, y: np.ndarray, z: np.ndarray) -> None:
 
 def load_data(file_path):
     """
-    Load data from a text file into a NumPy array.
+    Load dataset from a text file into a NumPy array.
 
     Parameters:
-    - file_path: Path to the text file containing the data.
+    - file_path: Path to the text file containing the dataset.
 
     Returns:
-    - data_array: NumPy array containing the loaded data.
+    - data_array: NumPy array containing the loaded dataset.
     """
     data_array = np.loadtxt(file_path)
 
@@ -203,7 +203,7 @@ def distance(x0: float, y0: float, z0: float, x1: float, y1: float, z1: float) -
 
 def save_data(x: np.ndarray, y: np.ndarray, z: np.ndarray) -> None:
     """
-    Save data as txt file
+    Save dataset as txt file
     :param x: x coordinate
     :param y: y coordinate
     :param z: z coordinate
@@ -237,7 +237,7 @@ def save_data(x: np.ndarray, y: np.ndarray, z: np.ndarray) -> None:
 def save_data_sct(pairs: np.ndarray) -> None:
     prefix = "200\t"
     event_count = 1
-    with open("OTDCR_200.txt", "w") as file:
+    with open("../data_sim/OTDCR_200.txt", "w") as file:
         for pair in pairs:
             for up, low in zip(pair[0], pair[1]):
                 file.write(
