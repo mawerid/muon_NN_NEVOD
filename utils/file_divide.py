@@ -2,45 +2,59 @@ import os
 import pandas as pd
 
 
-def load_and_save_dat_files(directory_in, directory_out, line_length):
-    files = os.listdir(directory_in)
-    files = [os.path.join(directory_in, filename) for filename in files]
-    files = [x for x in files if x.endswith(".dat")]
-    current_file = 0
-    i = 0
+def divide_files(directory_in: str, directory_out: str, file_name: str, file_ext: str = 'dat',
+                 line_length: int = 2 ** 16, set_num: bool = False) -> None:
+    """
+    Load and save files from a directory to another directory with chosen length.
 
+    Args:
+        directory_in (str): The directory where the input dat files are located.
+        directory_out (str): The directory where the output files will be saved.
+        file_name (str): The base name for the output files.
+        file_ext (str, optional): The file extension for the input and output files. Defaults to 'dat'.
+        line_length (int, optional): The number of lines to include in each output file. Defaults to 2^16.
+        set_num(bool, optional): Whether to add the line number to the output file name. Defaults to False.
+
+    Raises:
+        ValueError: If no files are found in the input directory.
+
+    Returns:
+        None
+
+    This function loads dat files from the input directory, splits them into chunks of specified line length, and saves each chunk as a separate file in the output directory. The output files are named using the base file name and the range of lines included in each chunk.
+
+    Example:
+        load_and_save_dat_files('/path/to/input', '/path/to/output', 'output_file', 'dat', 1000)
+    """
+    files = [os.path.join(directory_in, filename) for filename in os.listdir(directory_in)
+             if filename.endswith(f".{file_ext}")]
+    if not files:
+        raise ValueError("No files found in the directory")
+
+    print("Founded files:")
     print(files)
-    all_data = pd.read_csv(files[current_file], delimiter='\t', header=None)
-    current_file += 1
 
-    print("Start here")
+    count = 0
 
-    while True:
-        if len(all_data) > line_length:
-            all_data.loc[0: line_length].to_csv(
-                os.path.join(directory_out, f"exp_data_{i * line_length}_{(i + 1) * line_length - 1}.dat"), sep='\t',
-                index=False, header=False)
-            print("File written", i, len(all_data))
-            all_data = all_data.drop(range(line_length))
-            all_data = all_data.reset_index(drop=True)
-            i += 1
-
-        if len(all_data) <= line_length:
-            if current_file == len(files):
-                all_data.to_csv(
-                    os.path.join(directory_out,
-                                 f"exp_data_{i * line_length}_{i * line_length + len(all_data) - 1}.dat"),
-                    sep='\t', index=False, header=False)
-                print("File written ended", i, len(all_data))
-                break
-            else:
-                data = pd.read_csv(files[current_file], delimiter='\t', header=None)
-                current_file += 1
-                all_data.append(data, ignore_index=True)
-
-        if len(all_data) == 0:
-            break
+    for i, file in enumerate(files):
+        try:
+            data = pd.read_csv(file, delimiter='\t', header=None)
+            num_rows = len(data)
+            for j in range(0, num_rows, line_length):
+                chunk = data.iloc[j:j + line_length]
+                if set_num:
+                    output_file = os.path.join(directory_out,
+                                               f"{file_name}_{count}.{file_ext}")
+                    count += 1
+                else:
+                    output_file = os.path.join(directory_out,
+                                               f"{file_name}_{i * line_length + j}_{i * line_length + j + len(chunk) - 1}.{file_ext}")
+                chunk.to_csv(output_file, sep='\t', index=False, header=False)
+            print(f"File written {i + 1}/{len(files)}")
+        except Exception as e:
+            print(f"Error processing file {file}: {e}")
 
 
 if __name__ == "__main__":
-    load_and_save_dat_files("../dataset/exp", "../dataset/exp/", 2 ** 16)
+    # divide_files("../dataset/exp", "../dataset/exp", "exp_data")
+    divide_files("../data_sim/tmp", "../data_sim/tmp1", "OTDCR", "txt", 200, True)
