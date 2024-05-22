@@ -1,13 +1,13 @@
 from generate.sct import Sct
 from generate.decor import Decor
+from generate.sphere import Sphere
 from generate.utils import visualise_data
-import matplotlib.pyplot as plt
 import numpy as np
 
 if __name__ == "__main__":
-    gen = Decor(160, 3)
+    gen = Sphere(1600, 3, theta_range=(0, 100 / 180 * np.pi))
     start, end = gen.generate()
-    # gen.save()
+    gen.save()
     # start, end = gen.load_data("../data_sim/OTDCR_1.txt")
 
     # plt.hist(np.r_[start, end], bins=100)

@@ -20,14 +20,14 @@ def distance(x0: float, y0: float, z0: float,
         float: The Euclidean distance between the two points.
     """
 
-    return np.square(x0 - x1) + np.square(y0 - y1) + np.square(z0 - z1)
+    return np.sqrt(np.square(x0 - x1) + np.square(y0 - y1) + np.square(z0 - z1))
 
 
 def sphere_uniform(points_count: int,
                    theta_range: Tuple[float, float],
                    phi_range: Tuple[float, float],
                    grad: bool = True,
-                   radius: float = 15) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+                   radius: float = 14) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Generate points uniformly distributed on a sphere.
 
@@ -54,17 +54,19 @@ def sphere_uniform(points_count: int,
         phi_min = np.deg2rad(phi_min)
         phi_max = np.deg2rad(phi_max)
 
-    assert 0 <= theta_min < theta_max <= 2 * np.pi
-    assert 0 <= phi_min < phi_max <= np.pi
+    assert 0 <= theta_min < theta_max <= np.pi
+    assert 0 <= phi_min < phi_max <= 2 * np.pi
     assert radius > 0
     assert points_count > 0
 
-    theta = np.random.uniform(theta_min, theta_max, points_count)
-    cos_phi = np.random.uniform(np.cos(phi_min), np.cos(phi_max), points_count)
+    phi = np.random.uniform(phi_min, phi_max, points_count)
+    cos_theta = np.random.uniform(np.cos(theta_min), np.cos(theta_max), points_count)
+    # theta = np.random.uniform(theta_min, theta_max, points_count)
+    # cos_phi = np.random.uniform(np.cos(phi_min), np.cos(phi_max), points_count)
 
-    x = np.sqrt(1 - np.square(cos_phi)) * np.cos(theta) * radius
-    y = np.sqrt(1 - np.square(cos_phi)) * np.sin(theta) * radius
-    z = cos_phi * radius
+    x = np.sqrt(1 - np.square(cos_theta)) * np.cos(phi) * radius
+    y = np.sqrt(1 - np.square(cos_theta)) * np.sin(phi) * radius
+    z = cos_theta * radius
 
     return np.c_[x, y, z]
 
@@ -136,7 +138,7 @@ def visualise_data(data: Union[np.ndarray, Tuple[np.ndarray, np.ndarray, np.ndar
 
     if divide_start_end:
         if divider_mask is None:
-            divider_mask = (z <= 5)
+            divider_mask = (z <= 4.2)
         ax.scatter(x, y, z, c=divider_mask, cmap='coolwarm')
     else:
         ax.scatter(x, y, z)

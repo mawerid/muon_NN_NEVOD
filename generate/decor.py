@@ -92,12 +92,6 @@ class Decor(Generator):
         file_name = f"../data_sim/OTDCR_{self.run_number}.txt"
 
         with open(file_name, 'w') as file:
-            i = 0
-
-            print(self.data_start.shape)
-            print(self.data_end.shape)
-            print(self.energy.shape)
-
             for i in range(self.track_count):
                 line = f"{self.run_number}\t{i}\t"
                 if save_energy:

@@ -2,6 +2,9 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 
 
+# - Подготовить класс датасета для работы с несколькими файлами (с единым форматом входным)
+
+
 def angles_from_sct(up_number: int, down_number: int):
     pass
 
