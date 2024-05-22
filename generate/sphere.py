@@ -26,7 +26,17 @@ class Sphere(Generator):
         self.phi_range = phi_range
 
     def generate(self) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Generate the start and end positions of tracks on a sphere.
 
+        This function generates a set of tracks on a sphere by randomly distributing points on the sphere's surface. The number of tracks to generate is determined by the `track_count` attribute of the class. The sphere is defined by its radius and the range of angles (`theta_range` and `phi_range`) in spherical coordinates.
+
+        Returns:
+            Tuple[np.ndarray, np.ndarray]: A tuple containing two numpy arrays representing the start and end positions of the generated tracks. Each array has shape (N, 3), where N is the number of tracks. The first dimension represents the tracks, and the second dimension represents the x, y, and z coordinates of the points.
+
+        Raises:
+            None
+        """
         self.data_start = np.zeros((0, 3))
         self.data_end = np.zeros((0, 3))
 
