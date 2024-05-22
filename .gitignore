@@ -2,6 +2,6 @@
 logs
 *.ipynb_checkpoints
 dataset/dataset*
-dataset/exp_data
+dataset/exp*
 data_sim
 data

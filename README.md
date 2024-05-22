@@ -26,7 +26,7 @@ MODEL_DATA_TYPE_ITER_TIME:
 - other (?)
 
 - [DONE] Restructure all experiment
-- Create class of raw data generator for simulation (SCT, DECOR, full sphere)
+- [IN PROGRESS] Create class of raw data generator for simulation (SCT, DECOR, full sphere)
 - Data loader class (from raw data (exp/sim) to proper datasets for pytorch)
 - Write and check pipeline with standard NN class model (learning, save and checkpoints and show stats, breakpoints)
 - Write class for working NN model with structure
