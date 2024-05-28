@@ -1,7 +1,5 @@
 *.idea
 logs
 *.ipynb_checkpoints
-dataset/dataset*
-dataset/exp*
-data_sim
+dataset/
 data

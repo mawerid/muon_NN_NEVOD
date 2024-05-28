@@ -40,7 +40,6 @@ class Sct(Generator):
         cnt_pos_z_down = 0.0  # -4.5 + 4.5  # - 0.3
 
         points_num = np.sqrt(self.track_count // 1600).astype(int)
-        print(points_num)
         points = np.zeros((0, 3))
 
         for j in range(5):
@@ -78,7 +77,7 @@ class Sct(Generator):
         self.energy = self.generate_energy_uniform()
 
         # Uncomment the line below if you want to visualize the generated points
-        visualise_data((points[:, 0], points[:, 1], points[:, 2]))
+        # visualise_data((points[:, 0], points[:, 1], points[:, 2]))
 
         return self.data_start, self.data_end
 
@@ -93,14 +92,10 @@ class Sct(Generator):
             None
         """
 
-        file_name = f"../data_sim/OTDCR_{self.run_number}.txt"
+        file_name = f"../dataset/data_sim/sct/OTDCR_{self.run_number}.txt"
 
         with open(file_name, 'w') as file:
             i = 0
-
-            print(self.data_start.shape)
-            print(self.data_end.shape)
-            print(self.energy.shape)
 
             for start in self.data_start:
                 for end in self.data_end:

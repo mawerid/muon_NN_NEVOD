@@ -1,3 +1,5 @@
+from matplotlib import pyplot as plt
+
 from generate.generator import Generator
 import numpy as np
 from typing import Tuple
@@ -46,6 +48,9 @@ class Sphere(Generator):
 
         self.data_start = np.array(points)
 
+        theta = np.arctan2(np.sqrt(self.data_start[:, 0] ** 2 + self.data_start[:, 1] ** 2), self.data_start[:, 2])
+        self.energy = self.generate_energy(theta)
+
         end_theta_range = (np.pi - self.theta_range[1], np.pi - self.theta_range[0])
         end_phi_range = (2 * np.pi - self.phi_range[1], 2 * np.pi - self.phi_range[0])
 
@@ -77,10 +82,8 @@ class Sphere(Generator):
         points[:, 1] += shift_y
         points[:, 2] += shift_z
 
-        self.energy = self.generate_energy_uniform()
-
         # Uncomment the line below if you want to visualize the generated points
-        visualise_data((points[:, 0], points[:, 1], points[:, 2]))
+        # visualise_data((points[:, 0], points[:, 1], points[:, 2]))
 
         return self.data_start, self.data_end
 
@@ -102,11 +105,11 @@ class Sphere(Generator):
 
         energy = np.empty_like(thetas, dtype=float)
 
-        mask1 = thetas < 60
-        mask2 = thetas >= 60
+        mask1 = thetas < np.pi / 3
+        mask2 = thetas >= np.pi / 3
 
-        energy[mask1] = np.random.uniform(low=80, high=100, size=mask1.sum())
-        energy[mask2] = np.random.uniform(low=1, high=20, size=mask2.sum())
+        energy[mask1] = np.random.uniform(low=1, high=20, size=mask1.sum())
+        energy[mask2] = np.random.uniform(low=80, high=100, size=mask2.sum())
 
         return energy
 
@@ -121,7 +124,7 @@ class Sphere(Generator):
             None
         """
 
-        file_name = f"../data_sim/OTDCR_{self.run_number}.txt"
+        file_name = f"../dataset/data_sim/sphere/OTDCR_{self.run_number}.txt"
 
         with open(file_name, 'w') as file:
             for i in range(self.track_count):

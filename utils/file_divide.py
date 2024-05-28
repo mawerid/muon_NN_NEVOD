@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def divide_files(directory_in: str, directory_out: str, file_name: str, file_ext: str = 'dat',
-                 line_length: int = 2 ** 16, set_num: bool = False) -> None:
+                 line_length: int = 2 ** 16, set_num: bool = False, sep: str = '\t') -> None:
     """
     Load and save files from a directory to another directory with chosen length.
 
@@ -14,6 +14,7 @@ def divide_files(directory_in: str, directory_out: str, file_name: str, file_ext
         file_ext (str, optional): The file extension for the input and output files. Defaults to 'dat'.
         line_length (int, optional): The number of lines to include in each output file. Defaults to 2^16.
         set_num(bool, optional): Whether to add the line number to the output file name. Defaults to False.
+        sep(str, optional): The separator for the input and output files. Defaults to '\t'.
 
     Raises:
         ValueError: If no files are found in the input directory.
@@ -26,8 +27,8 @@ def divide_files(directory_in: str, directory_out: str, file_name: str, file_ext
     Example:
         load_and_save_dat_files('/path/to/input', '/path/to/output', 'output_file', 'dat', 1000)
     """
-    files = [os.path.join(directory_in, filename) for filename in os.listdir(directory_in)
-             if filename.endswith(f".{file_ext}")]
+    files = sorted([os.path.join(directory_in, filename) for filename in os.listdir(directory_in)
+                    if filename.endswith(f".{file_ext}")])
     if not files:
         raise ValueError("No files found in the directory")
 
@@ -36,25 +37,44 @@ def divide_files(directory_in: str, directory_out: str, file_name: str, file_ext
 
     count = 0
 
+    default_file = os.path.join(directory_in, f"chunks.{file_ext}")
+    files.append(default_file)
+
     for i, file in enumerate(files):
         try:
-            data = pd.read_csv(file, delimiter='\t', header=None)
+            data = pd.read_csv(file, delimiter=sep, header=None)
             num_rows = len(data)
             for j in range(0, num_rows, line_length):
                 chunk = data.iloc[j:j + line_length]
-                if set_num:
-                    output_file = os.path.join(directory_out,
-                                               f"{file_name}_{count}.{file_ext}")
-                    count += 1
+                if len(chunk) < line_length and file != default_file:
+                    if os.path.exists(default_file):
+                        chunk.to_csv(default_file, mode='a', sep=sep, index=False, header=False)
+                    else:
+                        chunk.to_csv(default_file, sep=sep, index=False, header=False)
                 else:
-                    output_file = os.path.join(directory_out,
-                                               f"{file_name}_{i * line_length + j}_{i * line_length + j + len(chunk) - 1}.{file_ext}")
-                chunk.to_csv(output_file, sep='\t', index=False, header=False)
-            print(f"File written {i + 1}/{len(files)}")
+                    if set_num:
+                        output_file = os.path.join(directory_out,
+                                                   f"{file_name}_{count}.{file_ext}")
+
+                    else:
+                        output_file = os.path.join(directory_out,
+                                                   f"{file_name}_{count * line_length}_{count * line_length + len(chunk) - 1}.{file_ext}")
+                    chunk.to_csv(output_file, sep=sep, index=False, header=False)
+                    print(f"File saved: {output_file}")
+                    count += 1
+                del chunk
+            del data
+            print(f"File written {i + 1}/{len(files)} ({file})")
         except Exception as e:
             print(f"Error processing file {file}: {e}")
 
+    if os.path.exists(default_file):
+        os.remove(default_file)
+
 
 if __name__ == "__main__":
-    # divide_files("../dataset/exp", "../dataset/exp", "exp_data")
-    divide_files("../data_sim/tmp", "../data_sim/tmp1", "OTDCR", "txt", 200, True)
+    divide_files("../dataset/data_sim/decor/raw/answer", "../dataset/data_sim/decor/divided_raw/answer", "OTDCR",
+                 "txt", 1000, True)
+
+    # divide_files("../dataset/data_exp/sct", "../dataset/data_exp/sct/divided_raw", "exp_data",
+    #              "dat", 2 ** 16, False)

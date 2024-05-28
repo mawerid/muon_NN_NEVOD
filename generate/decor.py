@@ -74,7 +74,7 @@ class Decor(Generator):
         self.energy = self.generate_energy_uniform()
 
         # Uncomment the line below if you want to visualize the generated points
-        visualise_data((points[:, 0], points[:, 1], points[:, 2]))
+        # visualise_data((points[:, 0], points[:, 1], points[:, 2]))
 
         return self.data_start, self.data_end
 
@@ -89,7 +89,7 @@ class Decor(Generator):
             None
         """
 
-        file_name = f"../data_sim/OTDCR_{self.run_number}.txt"
+        file_name = f"../dataset/data_sim/decor/OTDCR_{self.run_number}.txt"
 
         with open(file_name, 'w') as file:
             for i in range(self.track_count):
