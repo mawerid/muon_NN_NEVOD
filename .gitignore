@@ -1,5 +1,9 @@
 *.idea
+*.vscode
+old_version/*
 logs
 *.ipynb_checkpoints
+__pycache__
+*.pyc
 dataset/
 data
